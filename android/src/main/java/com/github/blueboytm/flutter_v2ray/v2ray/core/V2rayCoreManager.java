@@ -187,7 +187,7 @@ public final class V2rayCoreManager {
             v2RayPoint.runLoop(false);
             V2RAY_STATE = AppConfigs.V2RAY_STATES.V2RAY_CONNECTED;
             if (isV2rayCoreRunning()) {
-                showNotification(v2rayConfig);
+                // showNotification(v2rayConfig);
             }
         } catch (Exception e) {
             Log.e(V2rayCoreManager.class.getSimpleName(), "startCore failed =>", e);
@@ -247,59 +247,59 @@ public final class V2rayCoreManager {
 //        return mNotificationManager
 //    }
 
-    private NotificationManager getNotificationManager() {
-        if (mNotificationManager == null) {
-            try {
-                mNotificationManager = (NotificationManager) v2rayServicesListener.getService().getSystemService(Context.NOTIFICATION_SERVICE);
-            } catch (Exception e) {
-                return null;
-            }
-        }
-        return mNotificationManager;
-    }
+    // private NotificationManager getNotificationManager() {
+    //     if (mNotificationManager == null) {
+    //         try {
+    //             mNotificationManager = (NotificationManager) v2rayServicesListener.getService().getSystemService(Context.NOTIFICATION_SERVICE);
+    //         } catch (Exception e) {
+    //             return null;
+    //         }
+    //     }
+    //     return mNotificationManager;
+    // }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private String createNotificationChannelID(final String Application_name) {
-        String notification_channel_id = "DEV7_DEV_V_E_CH_ID";
-        NotificationChannel notificationChannel = new NotificationChannel(
-                notification_channel_id, Application_name + " Background Service", NotificationManager.IMPORTANCE_DEFAULT);
-        notificationChannel.setLightColor(Color.BLUE);
-        notificationChannel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
-        Objects.requireNonNull(getNotificationManager()).createNotificationChannel(notificationChannel);
-        return notification_channel_id;
-    }
+    // @RequiresApi(api = Build.VERSION_CODES.O)
+    // private String createNotificationChannelID(final String Application_name) {
+    //     String notification_channel_id = "DEV7_DEV_V_E_CH_ID";
+    //     NotificationChannel notificationChannel = new NotificationChannel(
+    //             notification_channel_id, Application_name + " Background Service", NotificationManager.IMPORTANCE_DEFAULT);
+    //     notificationChannel.setLightColor(Color.BLUE);
+    //     notificationChannel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
+    //     Objects.requireNonNull(getNotificationManager()).createNotificationChannel(notificationChannel);
+    //     return notification_channel_id;
+    // }
 
-    private int judgeForNotificationFlag() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT;
-        } else {
-            return PendingIntent.FLAG_UPDATE_CURRENT;
-        }
-    }
+    // private int judgeForNotificationFlag() {
+    //     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    //         return PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT;
+    //     } else {
+    //         return PendingIntent.FLAG_UPDATE_CURRENT;
+    //     }
+    // }
 
-    private void showNotification(final V2rayConfig v2rayConfig) {
-        if (v2rayServicesListener == null) {
-            return;
-        }
-        Intent launchIntent = v2rayServicesListener.getService().getPackageManager().
-                getLaunchIntentForPackage(v2rayServicesListener.getService().getApplicationInfo().packageName);
-        launchIntent.setAction("FROM_DISCONNECT_BTN");
-        launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent notificationContentPendingIntent = PendingIntent.getActivity(
-                v2rayServicesListener.getService(), 0, launchIntent, judgeForNotificationFlag());
-        String notificationChannelID = "";
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            notificationChannelID = createNotificationChannelID(v2rayConfig.APPLICATION_NAME);
-        }
+    // private void showNotification(final V2rayConfig v2rayConfig) {
+    //     if (v2rayServicesListener == null) {
+    //         return;
+    //     }
+    //     Intent launchIntent = v2rayServicesListener.getService().getPackageManager().
+    //             getLaunchIntentForPackage(v2rayServicesListener.getService().getApplicationInfo().packageName);
+    //     launchIntent.setAction("FROM_DISCONNECT_BTN");
+    //     launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    //     PendingIntent notificationContentPendingIntent = PendingIntent.getActivity(
+    //             v2rayServicesListener.getService(), 0, launchIntent, judgeForNotificationFlag());
+    //     String notificationChannelID = "";
+    //     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+    //         notificationChannelID = createNotificationChannelID(v2rayConfig.APPLICATION_NAME);
+    //     }
     
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(v2rayServicesListener.getService(), notificationChannelID);
-        mBuilder.setSmallIcon(v2rayConfig.APPLICATION_ICON)
-                .setContentTitle(v2rayConfig.REMARK)
-                .setContentText("tap to open application")
-                .setContentIntent(notificationContentPendingIntent);
-        v2rayServicesListener.getService().startForeground(1, mBuilder.build());
-    }
+    //     NotificationCompat.Builder mBuilder =
+    //             new NotificationCompat.Builder(v2rayServicesListener.getService(), notificationChannelID);
+    //     mBuilder.setSmallIcon(v2rayConfig.APPLICATION_ICON)
+    //             .setContentTitle(v2rayConfig.REMARK)
+    //             .setContentText("tap to open application")
+    //             .setContentIntent(notificationContentPendingIntent);
+    //     v2rayServicesListener.getService().startForeground(1, mBuilder.build());
+    // }
 
     public boolean isV2rayCoreRunning() {
         if (v2RayPoint != null) {
